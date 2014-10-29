@@ -81,8 +81,8 @@ public class SceneManager {
 	    @Override
 	    protected Void doInBackground(Void... params) {
 	      if (oldScene != null) {
+	    	  oldScene.unloadResources();
 	        oldScene.destroy();
-	        oldScene.unloadResources();
 	      }
 	      Debug.i("loading new scene");
 	      scene.initialize(res);
@@ -100,43 +100,6 @@ public class SceneManager {
 	    }
 	    
 	  }
-	  
-	  public void showScene(Class<? extends AbstractScene> sceneClazz, final int level, final int world) {
-		    if (sceneClazz == LoadingScene.class) {
-		      throw new IllegalArgumentException("You can't switch to Loading scene");
-		}
-		
-		try {
-		  final AbstractScene scene = sceneClazz.newInstance();
-		  Debug.i("Showing scene " + scene.getClass().getName());
-		  
-		  final AbstractScene oldScene = getCurrentScene();
-		  setCurrentScene(loadingScene);
-		  res.engine.setScene(loadingScene);
-		  
-		  new AsyncTask<Void, Void, Void>() {
-		
-		    @Override
-		    protected Void doInBackground(Void... params) {
-		      if (oldScene != null) {
-		        oldScene.destroy();
-		        oldScene.unloadResources();
-		      }
-		      scene.initialize(res);
-		      scene.loadResources();
-	    	  scene.create();
-		      setCurrentScene(scene);
-		      res.engine.setScene(scene);
-		      return null;
-		    }
-		  }.execute();
-		} catch (Exception e) {
-		  String message = "Error while changing scene";
-		      Debug.e(message, e);
-		      throw new RuntimeException(message, e);
-		    }
-		    
-		  }
 	 
 	  public static SceneManager getInstance() {
 	    return INSTANCE;

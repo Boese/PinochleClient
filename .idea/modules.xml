@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndEngine/AndEngine.iml" filepath="$PROJECT_DIR$/AndEngine/AndEngine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndEngineAugmentedRealityExtension/AndEngineAugmentedRealityExtension.iml" filepath="$PROJECT_DIR$/AndEngineAugmentedRealityExtension/AndEngineAugmentedRealityExtension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndEngineCocosBuilderExtension/AndEngineCocosBuilderExtension.iml" filepath="$PROJECT_DIR$/AndEngineCocosBuilderExtension/AndEngineCocosBuilderExtension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndEngineCocosBuilderExtensionCCAnimatedSpriteExtension/AndEngineCocosBuilderExtensionCCAnimatedSpriteExtension.iml" filepath="$PROJECT_DIR$/AndEngineCocosBuilderExtensionCCAnimatedSpriteExtension/AndEngineCocosBuilderExtensionCCAnimatedSpriteExtension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndEngineCollisionsExtension-master/AndEngineCollisionsExtension-master.iml" filepath="$PROJECT_DIR$/AndEngineCollisionsExtension-master/AndEngineCollisionsExtension-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndEngineExamples/AndEngineExamples.iml" filepath="$PROJECT_DIR$/AndEngineExamples/AndEngineExamples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndEngineLiveWallpaperExtension/AndEngineLiveWallpaperExtension.iml" filepath="$PROJECT_DIR$/AndEngineLiveWallpaperExtension/AndEngineLiveWallpaperExtension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndEngineMODPlayerExtension/AndEngineMODPlayerExtension.iml" filepath="$PROJECT_DIR$/AndEngineMODPlayerExtension/AndEngineMODPlayerExtension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndEngineMultiplayerExtension/AndEngineMultiplayerExtension.iml" filepath="$PROJECT_DIR$/AndEngineMultiplayerExtension/AndEngineMultiplayerExtension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndEnginePhysicsBox2DExtension/AndEnginePhysicsBox2DExtension.iml" filepath="$PROJECT_DIR$/AndEnginePhysicsBox2DExtension/AndEnginePhysicsBox2DExtension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndEngineSVGTextureRegionExtension/AndEngineSVGTextureRegionExtension.iml" filepath="$PROJECT_DIR$/AndEngineSVGTextureRegionExtension/AndEngineSVGTextureRegionExtension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndEngineScriptingExtension/AndEngineScriptingExtension.iml" filepath="$PROJECT_DIR$/AndEngineScriptingExtension/AndEngineScriptingExtension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndEngineTMXTiledMapExtension/AndEngineTMXTiledMapExtension.iml" filepath="$PROJECT_DIR$/AndEngineTMXTiledMapExtension/AndEngineTMXTiledMapExtension.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PinochleClient/PinochleClient.iml" filepath="$PROJECT_DIR$/PinochleClient/PinochleClient.iml" />
+    </modules>
+  </component>
+</project>
+

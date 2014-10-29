@@ -3,7 +3,6 @@ package com.edu.pinochleclient;
 import java.io.IOException;
 
 import org.andengine.engine.Engine;
-import org.andengine.engine.LimitedFPSEngine;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -14,8 +13,10 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.debug.Debug;
 
-import android.view.KeyEvent;
+import com.edu.pinochlescene.MenuScene;
 
+import android.content.Intent;
+import android.view.KeyEvent;
 public class GameActivity extends BaseGameActivity {
 	
 	public ZoomCamera camera = null;
@@ -80,15 +81,10 @@ public class GameActivity extends BaseGameActivity {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-		      try {
-		        SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
-		      } catch (NullPointerException ne) {
-		        // in highly unlikely situation when this there is no scene, do nothing
-		        Debug.e("The current scene is null", ne);
-		      }
-		    }
-		return false;
+		if (keyCode == KeyEvent.KEYCODE_BACK){
+			System.exit(0);
+		}
+		return true;
 	}
 	
 }

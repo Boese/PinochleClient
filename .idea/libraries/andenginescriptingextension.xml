@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="andenginescriptingextension">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/AndEngineScriptingExtension/bin/andenginescriptingextension.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

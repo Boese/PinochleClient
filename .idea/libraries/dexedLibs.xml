@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="dexedLibs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/AndEngineExamples/bin/dexedLibs/andenginesvgtextureregionextension-32025e24e3854654f008143d2786c8df.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AndEngineExamples/bin/dexedLibs/andengineaugmentedrealityextension-5209fdf463db3e0c047752713598be92.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AndEngineExamples/bin/dexedLibs/andenginephysicsbox2dextension-bb54d8649b374cd7be7d954135e35294.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AndEngineExamples/bin/dexedLibs/andenginecocosbuilderextension-578df8bb464840c08d4220b6cb447ed3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AndEngineExamples/bin/dexedLibs/andenginemultiplayerextension-8ba11efd56fe2fd7f6b8222ed50a59aa.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AndEngineExamples/bin/dexedLibs/andenginetmxtiledmapextension-776f16a536a4b68ff903565d90edeeb4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AndEngineExamples/bin/dexedLibs/andenginescriptingextension-193a3e788867dd25f8561aea513642d8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AndEngineExamples/bin/dexedLibs/andengine-5624a9d1d48df51a97a3f7fcf84567ce.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AndEngineExamples/bin/dexedLibs/andenginemodplayerextension-9a1ea0785a395a2c9b56c1b8b4ec0066.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AndEngineExamples/bin/dexedLibs/andenginecocosbuilderextensionccanimatedspriteextension-5f6a116b3484eea0ffb4be83f70c0843.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AndEngineExamples/bin/dexedLibs/andenginelivewallpaperextension-1b829a94d8369b61bf439bda4fea4cce.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

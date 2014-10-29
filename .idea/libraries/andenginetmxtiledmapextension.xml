@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="andenginetmxtiledmapextension">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/AndEngineTMXTiledMapExtension/bin/andenginetmxtiledmapextension.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

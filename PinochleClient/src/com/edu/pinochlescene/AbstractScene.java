@@ -7,8 +7,6 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
-import android.os.Bundle;
-
 import com.edu.pinochleclient.GameActivity;
 import com.edu.pinochleclient.ResourceManager;
 

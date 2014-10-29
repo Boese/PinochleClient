@@ -15,12 +15,13 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.util.FPSLogger;
 import org.andengine.ui.activity.SimpleLayoutGameActivity;
 import org.andengine.util.adt.color.Color;
+import org.andengine.util.debug.Debug;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import com.edu.pinochleenum.Card;
 import com.edu.pinochleenum.Request;
 import com.edu.pinochleenum.Suit;
+import com.edu.pinochlescene.MenuScene;
 import com.edu.utils.PlayerResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,6 +63,17 @@ public class PlayActivity extends SimpleLayoutGameActivity{
 		private static PlayerResponse response = new PlayerResponse();
 		private static List<Card> cards = new ArrayList<Card>();
 		private static ObjectMapper mapper = new ObjectMapper();
+		
+		@Override
+		public boolean onKeyDown(int keyCode, KeyEvent event) {
+			if (keyCode == KeyEvent.KEYCODE_BACK)
+				try{
+					socket.closeAfterWrite();
+					msgHandler.cancel(true);
+				}catch(Exception e) {}
+		      System.exit(0);
+			return false;
+		}
 		
 		@Override
 		protected int getLayoutID() {
@@ -135,7 +148,9 @@ public class PlayActivity extends SimpleLayoutGameActivity{
 		public EngineOptions onCreateEngineOptions() {
 			final Camera camera = new Camera(0, 0, PlayActivity.CAMERA_WIDTH, PlayActivity.CAMERA_HEIGHT);
 
-			return new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(PlayActivity.CAMERA_WIDTH, PlayActivity.CAMERA_HEIGHT), camera);
+			return new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, 
+					new RatioResolutionPolicy(PlayActivity.CAMERA_WIDTH, 
+							PlayActivity.CAMERA_HEIGHT), camera);
 		}
 
 		@Override
@@ -176,7 +191,7 @@ public class PlayActivity extends SimpleLayoutGameActivity{
 		                service = new NIOService();
 		                
 		                // Open our socket.
-		                socket = service.openSocket("76.14.226.220", 5217);
+		                socket = service.openSocket("10.0.2.2", 5217);
 		                
 		                // Use regular 1 byte header reader/writer
 		                socket.setPacketReader(new AsciiLinePacketReader());
@@ -244,7 +259,7 @@ public class PlayActivity extends SimpleLayoutGameActivity{
 		            // Read IO until process exits.
 		            while(true) {
 		            	service.selectBlocking();
-		            	Thread.sleep(100);
+		            	//Thread.sleep(100);
 		            }
 		            
 		        }
@@ -252,7 +267,6 @@ public class PlayActivity extends SimpleLayoutGameActivity{
 		        {
 		        	appendMessage(e.toString());
 		        }
-				
 				return null;
 			}
 			

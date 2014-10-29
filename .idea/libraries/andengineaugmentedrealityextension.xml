@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="andengineaugmentedrealityextension">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/AndEngineAugmentedRealityExtension/bin/andengineaugmentedrealityextension.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

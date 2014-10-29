@@ -14,9 +14,9 @@ import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 
 import com.edu.pinochleclient.PlayActivity;
+import com.edu.pinochleclient.SceneManager;
 
 import android.content.Intent;
-import android.widget.Toast;
 
 public class MenuScene extends AbstractScene {
 	
@@ -72,7 +72,6 @@ public class MenuScene extends AbstractScene {
 
 	@Override
 	public void unloadResources() {
-		startGame = null;
 	}
 
 	@Override

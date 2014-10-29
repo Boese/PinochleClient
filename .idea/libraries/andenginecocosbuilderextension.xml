@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="andenginecocosbuilderextension">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/AndEngineCocosBuilderExtension/bin/andenginecocosbuilderextension.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
