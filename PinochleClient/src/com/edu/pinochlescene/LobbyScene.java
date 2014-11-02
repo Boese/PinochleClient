@@ -1,8 +1,6 @@
 package com.edu.pinochlescene;
 
-import org.andengine.util.adt.color.Color;
-
-public class SplashScene extends AbstractScene {
+public class LobbyScene extends AbstractScene{
 
 	@Override
 	public void loadResources() {
@@ -12,7 +10,8 @@ public class SplashScene extends AbstractScene {
 
 	@Override
 	public void create() {
-		getBackground().setColor(Color.PINK);
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -38,5 +37,5 @@ public class SplashScene extends AbstractScene {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 }

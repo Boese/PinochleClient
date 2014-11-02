@@ -4,7 +4,7 @@ import org.andengine.util.debug.Debug;
 
 import com.edu.pinochlescene.AbstractScene;
 import com.edu.pinochlescene.LoadingScene;
-import com.edu.pinochlescene.MenuScene;
+import com.edu.pinochlescene.LoginScene;
 import com.edu.pinochlescene.SplashScene;
 
 import android.os.AsyncTask;
@@ -37,10 +37,10 @@ public class SceneManager {
 	    long timestamp = System.currentTimeMillis();
 	    // TODO later load common resources here
 	    
-	    MenuScene menu = new MenuScene();
-	    menu.initialize(res);
-	    menu.loadResources();
-	    menu.create();
+	    LoginScene login = new LoginScene();
+	    login.initialize(res);
+	    login.loadResources();
+	    login.create();
 	    loadingScene = new LoadingScene();
 	    loadingScene.initialize(res);
 	    loadingScene.loadResources();
@@ -54,8 +54,9 @@ public class SceneManager {
 	        Debug.w("This should not happen");
 	          }
 	        }
-	        setCurrentScene(menu);
-	        res.engine.setScene(menu);
+	        setCurrentScene(login);
+	        Debug.i("Showing loading scene");
+	        res.engine.setScene(login);
 	        splash.destroy();
 	        splash.unloadResources();
 	        return null;

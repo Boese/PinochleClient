@@ -1,7 +1,6 @@
 package com.edu.pinochleclient;
 
 import java.io.IOException;
-
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.options.EngineOptions;
@@ -11,19 +10,17 @@ import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.engine.options.resolutionpolicy.IResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
-import org.andengine.util.debug.Debug;
-
-import com.edu.pinochlescene.MenuScene;
 
 import android.content.Intent;
 import android.view.KeyEvent;
+
 public class GameActivity extends BaseGameActivity {
 	
 	public ZoomCamera camera = null;
 	public static final int CW = 720;
 	public static final int CH = 1200;
 	public static final int FPS_LIMIT = 60;
-	protected static final long SPLASH_DURATION = 2000;
+	protected static final long SPLASH_DURATION = 1000;
 	
 	@Override
 	public synchronized void onResumeGame() {
@@ -77,6 +74,7 @@ public class GameActivity extends BaseGameActivity {
 			throws IOException {
 		SceneManager.getInstance().showSplash();
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
+		startActivityForResult(new Intent(this,PlayActivity.class), 1);
 	}
 	
 	@Override
@@ -85,6 +83,15 @@ public class GameActivity extends BaseGameActivity {
 			System.exit(0);
 		}
 		return true;
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    if (requestCode == 1) {
+	        if (resultCode == RESULT_OK) {
+	        	ResourceManager.getInstance().activity.toastOnUiThread("activity returned");
+	        }
+	    }
 	}
 	
 }
