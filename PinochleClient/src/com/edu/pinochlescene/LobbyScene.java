@@ -1,5 +1,7 @@
 package com.edu.pinochlescene;
 
+import org.andengine.util.adt.color.Color;
+
 public class LobbyScene extends AbstractScene{
 
 	@Override
@@ -10,8 +12,7 @@ public class LobbyScene extends AbstractScene{
 
 	@Override
 	public void create() {
-		// TODO Auto-generated method stub
-		
+		getBackground().setColor(Color.CYAN);
 	}
 
 	@Override

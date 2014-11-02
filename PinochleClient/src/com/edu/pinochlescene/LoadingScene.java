@@ -13,7 +13,7 @@ public class LoadingScene extends AbstractScene {
 	private Text loadingText;
 	@Override
 	public void loadResources() {
-		Font f = FontFactory.createFromAsset(engine.getFontManager(), engine.getTextureManager(), 256, 256, TextureOptions.BILINEAR, activity.getAssets(), "Geeza Pro Bold.ttf", 100f, true, Color.BLACK_ABGR_PACKED_INT);
+		Font f = FontFactory.createFromAsset(engine.getFontManager(), engine.getTextureManager(), 256, 256, TextureOptions.BILINEAR, activity.getAssets(), "fontfolder/Geeza Pro Bold.ttf", 100f, true, Color.BLACK_ABGR_PACKED_INT);
 		f.load();
 		loadingText = new Text(GameActivity.CW/2, GameActivity.CH/2, f, "LOADING",vbom);
 	}

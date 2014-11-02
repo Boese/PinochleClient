@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".PlayActivity" android:configChanges="orientation"/>
+        <activity android:name=".LoginActivity" android:configChanges="orientation"/>
     </application>
 
 </manifest>

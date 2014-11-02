@@ -11,7 +11,10 @@ import org.andengine.engine.options.resolutionpolicy.IResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
+import com.edu.pinochlescene.LobbyScene;
+
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.KeyEvent;
 
 public class GameActivity extends BaseGameActivity {
@@ -74,7 +77,7 @@ public class GameActivity extends BaseGameActivity {
 			throws IOException {
 		SceneManager.getInstance().showSplash();
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
-		startActivityForResult(new Intent(this,PlayActivity.class), 1);
+		Login();
 	}
 	
 	@Override
@@ -85,11 +88,23 @@ public class GameActivity extends BaseGameActivity {
 		return true;
 	}
 	
+	private void Login() {
+		startActivityForResult(new Intent(this,LoginActivity.class), 1);
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (requestCode == 1) {
 	        if (resultCode == RESULT_OK) {
-	        	ResourceManager.getInstance().activity.toastOnUiThread("activity returned");
+	        	String Username= data.getStringExtra("Username").trim();
+	        	String Password= data.getStringExtra("Password").trim();
+	        	
+	        	if(Username.equals("chris") && Password.equals("dogcat"))
+	        		SceneManager.getInstance().showScene(LobbyScene.class);
+	        	else {
+	        		ResourceManager.getInstance().activity.toastOnUiThread("denied!");
+	        		Login();
+	        	}
 	        }
 	    }
 	}
