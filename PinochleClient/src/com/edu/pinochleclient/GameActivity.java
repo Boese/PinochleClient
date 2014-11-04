@@ -1,6 +1,9 @@
 package com.edu.pinochleclient;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.options.EngineOptions;
@@ -12,6 +15,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import com.edu.pinochlescene.LobbyScene;
+import com.edu.pinochlescene.SplashScene;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +27,7 @@ public class GameActivity extends BaseGameActivity {
 	public static final int CW = 720;
 	public static final int CH = 1200;
 	public static final int FPS_LIMIT = 60;
-	protected static final long SPLASH_DURATION = 1000;
+	protected static final long SPLASH_DURATION = 4000;
 	
 	@Override
 	public synchronized void onResumeGame() {
@@ -59,7 +63,6 @@ public class GameActivity extends BaseGameActivity {
 		try {
 			ResourceManager.getInstance().init(this);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
@@ -75,15 +78,21 @@ public class GameActivity extends BaseGameActivity {
 	public void onPopulateScene(Scene pScene,
 			OnPopulateSceneCallback pOnPopulateSceneCallback)
 			throws IOException {
-		SceneManager.getInstance().showSplash();
+		SceneManager.getInstance().initLoadingScreen();
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
-		Login();
+		new Timer().schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				Login();
+			}
+		}, SPLASH_DURATION);
 	}
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK){
-			System.exit(0);
+			finish();
 		}
 		return true;
 	}
@@ -102,9 +111,18 @@ public class GameActivity extends BaseGameActivity {
 	        	if(Username.equals("chris") && Password.equals("dogcat"))
 	        		SceneManager.getInstance().showScene(LobbyScene.class);
 	        	else {
-	        		ResourceManager.getInstance().activity.toastOnUiThread("denied!");
-	        		Login();
+	        		ResourceManager.getInstance().connect();
+	        		//ResourceManager.getInstance().activity.toastOnUiThread("denied!");
+	        		//Login();
+	        		SceneManager.getInstance().showScene(LobbyScene.class);
 	        	}
+	        }
+	        else if(resultCode == RESULT_CANCELED) {
+	        	ResourceManager.getInstance().activity.toastOnUiThread("cancelled!");
+	        	finish();
+	        }
+	        else {
+	        	finish();
 	        }
 	    }
 	}

@@ -5,23 +5,22 @@ import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.util.adt.color.Color;
-
 import com.edu.pinochleclient.GameActivity;
 
 public class LoadingScene extends AbstractScene {
-
 	private Text loadingText;
+	
 	@Override
 	public void loadResources() {
 		Font f = FontFactory.createFromAsset(engine.getFontManager(), engine.getTextureManager(), 256, 256, TextureOptions.BILINEAR, activity.getAssets(), "fontfolder/Geeza Pro Bold.ttf", 100f, true, Color.BLACK_ABGR_PACKED_INT);
 		f.load();
-		loadingText = new Text(GameActivity.CW/2, GameActivity.CH/2, f, "LOADING",vbom);
+		loadingText = new Text(GameActivity.CW/2, GameActivity.CH-220, f, "Loading...",vbom);
 	}
 
 	@Override
 	public void create() {
-		getBackground().setColor(Color.GREEN);
-		this.attachChild(loadingText);
+		this.getBackground().setColor(Color.WHITE);
+	    this.attachChild(loadingText);
 	}
 
 	@Override

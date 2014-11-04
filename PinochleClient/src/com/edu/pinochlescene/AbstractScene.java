@@ -36,5 +36,6 @@ public abstract class AbstractScene extends Scene {
 	}
 	public abstract void onPause();
 	public abstract void onResume();
+	public void onUpdate(){}
 
 }
