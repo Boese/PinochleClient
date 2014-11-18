@@ -1,4 +1,4 @@
-package com.edu.utils;
+package com.edu.message;
 
 import java.util.ArrayList;
 import java.util.List;

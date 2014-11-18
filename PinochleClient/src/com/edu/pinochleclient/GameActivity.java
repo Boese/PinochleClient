@@ -3,6 +3,7 @@ package com.edu.pinochleclient;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.ZoomCamera;
@@ -13,9 +14,13 @@ import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.engine.options.resolutionpolicy.IResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
+import org.andengine.util.debug.Debug;
+import org.mindrot.jbcrypt.BCrypt;
 
+import com.edu.message.LoginPacket;
 import com.edu.pinochlescene.LobbyScene;
 import com.edu.pinochlescene.SplashScene;
+import com.edu.util.MessageHandler;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,7 +32,7 @@ public class GameActivity extends BaseGameActivity {
 	public static final int CW = 720;
 	public static final int CH = 1200;
 	public static final int FPS_LIMIT = 60;
-	protected static final long SPLASH_DURATION = 4000;
+	protected static final long SPLASH_DURATION = 2000;
 	
 	@Override
 	public synchronized void onResumeGame() {
@@ -62,6 +67,7 @@ public class GameActivity extends BaseGameActivity {
 			throws IOException {
 		try {
 			ResourceManager.getInstance().init(this);
+			ResourceManager.getInstance().connect();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -90,6 +96,12 @@ public class GameActivity extends BaseGameActivity {
 	}
 	
 	@Override
+	public void finish() {
+		ResourceManager.getInstance().disconnect();
+		super.finish();
+	}
+	
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK){
 			finish();
@@ -97,34 +109,8 @@ public class GameActivity extends BaseGameActivity {
 		return true;
 	}
 	
-	private void Login() {
-		startActivityForResult(new Intent(this,LoginActivity.class), 1);
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (requestCode == 1) {
-	        if (resultCode == RESULT_OK) {
-	        	String Username= data.getStringExtra("Username").trim();
-	        	String Password= data.getStringExtra("Password").trim();
-	        	
-	        	if(Username.equals("chris") && Password.equals("dogcat"))
-	        		SceneManager.getInstance().showScene(LobbyScene.class);
-	        	else {
-	        		ResourceManager.getInstance().connect();
-	        		//ResourceManager.getInstance().activity.toastOnUiThread("denied!");
-	        		//Login();
-	        		SceneManager.getInstance().showScene(LobbyScene.class);
-	        	}
-	        }
-	        else if(resultCode == RESULT_CANCELED) {
-	        	ResourceManager.getInstance().activity.toastOnUiThread("cancelled!");
-	        	finish();
-	        }
-	        else {
-	        	finish();
-	        }
-	    }
+	public void Login() {
+		startActivity(new Intent(this,LoginActivity.class));
 	}
 	
 }
