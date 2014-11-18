@@ -49,7 +49,7 @@ public class GameActivity extends BaseGameActivity {
 		camera = new ZoomCamera(0,0,CW,CH);
 		camera.setZClippingPlanes(-100, 100);
 		IResolutionPolicy resolutionPolicy = new FillResolutionPolicy();
-		EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_SENSOR, resolutionPolicy, camera);
+		EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, resolutionPolicy, camera);
 		engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
 		engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
 		return engineOptions;

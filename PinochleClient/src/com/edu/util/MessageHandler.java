@@ -28,9 +28,12 @@ public class MessageHandler {
 			break;
 		case "session_id": 
 			ResourceManager.getInstance().setSession_id(packet.getMessage());
+			ResourceManager.getInstance().loginActivity.finish();
 			SceneManager.getInstance().showScene(LobbyScene.class);
 			break;
 		case "create_success":
+			ResourceManager.getInstance().setMessage(packet.getMessage());
+			ResourceManager.getInstance().saveUser();
 			break;
 		case "response": 
 			ResourceManager.getInstance().setMessage(packet.getMessage());

@@ -1,19 +1,25 @@
 package com.edu.pinochleclient;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.andengine.util.debug.Debug;
 import org.mindrot.jbcrypt.BCrypt;
 
-import com.edu.message.LoginPacket;
-
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+
+import com.edu.message.LoginPacket;
 
 public class LoginActivity extends Activity{
 	private EditText username;
@@ -34,6 +40,9 @@ public class LoginActivity extends Activity{
 	private Button createBackButton;
 	private Button forgotBackButton;
 	
+	private ProgressBar spinner;
+	private Boolean passworddirty = false;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +54,25 @@ public class LoginActivity extends Activity{
 		password = (EditText)findViewById(R.id.password);
 		email = (EditText)findViewById(R.id.emailC);
 		message = (TextView)findViewById(R.id.textView2);
+		spinner = (ProgressBar)findViewById(R.id.progressBar1);
+		spinner.setVisibility(View.GONE);
 		
-		username.setText("");
-		password.setText("");
-		email.setText("");
+		username.setText(ResourceManager.getInstance().getUsername());
+		password.setText(ResourceManager.getInstance().getHashed_password());
+		email.setText(ResourceManager.getInstance().getEmail());
+		
+		password.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(MotionEvent.ACTION_UP == event.getAction()) {
+					Debug.i("password touched");
+					password = (EditText)findViewById(R.id.password);
+					password.setText("");
+	                passworddirty = true;
+	            }
+	            return false;
+			}
+	    });
 		
 		ResourceManager.getInstance().init(this);
 		
@@ -57,8 +81,14 @@ public class LoginActivity extends Activity{
 			@Override
 			public void onClick(View v) {
 				LoginPacket loginPacket = new LoginPacket("login",username.getText().toString());
-				loginPacket.setHash_password(BCrypt.hashpw(password.getText().toString(), ResourceManager.getInstance().getSalt()));
-        		ResourceManager.getInstance().login(loginPacket);
+				String encryptedpassword = encryptPassword(password.getText().toString());
+				if(encryptedpassword != null) {
+					loadSpinner(true);
+					loginPacket.setHash_password(encryptedpassword);
+	        		ResourceManager.getInstance().login(loginPacket);
+				} else {
+					setMessage("Password must be at least 8 characters");
+				}
 			}
 		});
 		createAccount = (Button)findViewById(R.id.createaccountbutton);
@@ -98,6 +128,8 @@ public class LoginActivity extends Activity{
 				});
 				username = (EditText)findViewById(R.id.usernameF);
 				email = (EditText)findViewById(R.id.emailF);
+				username.setText(ResourceManager.getInstance().getUsername());
+				email.setText(ResourceManager.getInstance().getEmail());
 			}
 		});
 		createViewButton = (Button)findViewById(R.id.createbutton);
@@ -106,14 +138,21 @@ public class LoginActivity extends Activity{
 			public void onClick(View v) {
 				LoginPacket loginPacket = new LoginPacket("create_account",username.getText().toString());
 				loginPacket.setEmail(email.getText().toString());
-				loginPacket.setHash_password(BCrypt.hashpw(password.getText().toString(), ResourceManager.getInstance().getSalt()));
-				ResourceManager.getInstance().login(loginPacket);
+				if(password.getText().toString().length() < 8) {
+					setMessage("Password must be at least 8 characters");
+				} else {
+					loadSpinner(true);
+					loginPacket.setHash_password(BCrypt.hashpw(password.getText().toString(), ResourceManager.getInstance().getSalt()));
+					ResourceManager.getInstance().setCreatePacket(loginPacket);
+					ResourceManager.getInstance().login(loginPacket);
+				}
 			}
 		});
 		forgotViewButton = (Button)findViewById(R.id.forgotbutton);
 		forgotViewButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				loadSpinner(true);
 				LoginPacket loginPacket = new LoginPacket("forgot_password",username.getText().toString());
 				loginPacket.setEmail(email.getText().toString());
 				ResourceManager.getInstance().login(loginPacket);
@@ -122,12 +161,53 @@ public class LoginActivity extends Activity{
 		
 	}
 	
+	private String encryptPassword(String password) {
+		String encryptedpassword = null;
+		if(!passworddirty && password.length() >= 8)
+			encryptedpassword = BCrypt.hashpw(password, ResourceManager.getInstance().getSalt());
+		else if(passworddirty && password.length() >= 8 && ResourceManager.getInstance().getStored_salt() != null) {
+			encryptedpassword = BCrypt.hashpw(password, ResourceManager.getInstance().getStored_salt());
+			Debug.i("Stored salt : " + ResourceManager.getInstance().getStored_salt());
+			Debug.i("encrypted password : " + encryptedpassword);
+			encryptedpassword = BCrypt.hashpw(encryptedpassword, ResourceManager.getInstance().getSalt());
+		}
+		else if(passworddirty && password.length() >= 8 && ResourceManager.getInstance().getStored_salt() == null) {
+			encryptedpassword = BCrypt.hashpw(password, ResourceManager.getInstance().getSalt());
+			encryptedpassword = BCrypt.hashpw(encryptedpassword, ResourceManager.getInstance().getSalt());
+		}
+		return encryptedpassword;	
+	}
+	
 	public void updateMessage(final String message) {
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				loadSpinner(false);
+				setMessage(message);
+			}
+		}, 1000);
+	}
+	
+	public void setMessage(final String message) {
 		final TextView t = this.message;
 		this.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				t.setText(message);
+			}
+		});
+		
+	}
+	
+	public void loadSpinner(final Boolean on) {
+		final ProgressBar s = this.spinner;
+		this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if(on)
+					s.setVisibility(View.VISIBLE);
+				else
+					s.setVisibility(View.GONE);
 			}
 		});
 	}
@@ -138,6 +218,7 @@ public class LoginActivity extends Activity{
 			switch(state) {
 			case "login": 
 				finish();
+				ResourceManager.getInstance().activity.finish();
 				break;
 			case "create":
 				createBackButton.performClick();
@@ -153,7 +234,6 @@ public class LoginActivity extends Activity{
 	@Override
 	public void finish() {
 	    super.finish();
-	    ResourceManager.getInstance().activity.finish();
 	}
 
 	@Override
