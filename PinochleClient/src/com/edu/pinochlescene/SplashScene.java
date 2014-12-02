@@ -23,11 +23,11 @@ public class SplashScene extends AbstractScene {
 	public void loadResources() {
 		Font f = FontFactory.createFromAsset(engine.getFontManager(), engine.getTextureManager(), 256, 256, TextureOptions.BILINEAR, activity.getAssets(), "fontfolder/Geeza Pro Bold.ttf", 100f, true, Color.WHITE_ARGB_PACKED_INT);
 		f.load();
-		loadingText = new Text(GameActivity.CW/2, GameActivity.CH-220, f, "CARDS",vbom);
+		loadingText = new Text(GameActivity.CW/2, GameActivity.CH-220, f, "Splash Scene",vbom);
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		gameTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),860, 1078, TextureOptions.BILINEAR);
-		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "logincardscopy.png", 0, 0);
+		gameTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),2000, 2000, TextureOptions.BILINEAR);
+		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "background.png", 0, 0);
 		gameTextureAtlas.load();
 	}
 

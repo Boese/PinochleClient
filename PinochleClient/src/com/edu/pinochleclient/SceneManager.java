@@ -70,7 +70,7 @@ public class SceneManager {
 		      scene.loadResources();
 	    	  scene.create();
 		      setCurrentScene(scene);
-		      res.engine.setScene(scene);
+	    	  res.engine.setScene(scene);
 		      return null;
 		    }
 		  }.execute();
@@ -88,7 +88,7 @@ public class SceneManager {
 		  public AbstractScene getCurrentScene() {
 		    return currentScene;
 		  }
-		  private void setCurrentScene(AbstractScene currentScene) {
+		  public void setCurrentScene(AbstractScene currentScene) {
 			  this.currentScene = null;
 		    this.currentScene = currentScene;
 		  }

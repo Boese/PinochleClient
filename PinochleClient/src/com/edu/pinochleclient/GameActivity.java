@@ -3,8 +3,6 @@ package com.edu.pinochleclient;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Logger;
-
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.options.EngineOptions;
@@ -15,16 +13,15 @@ import org.andengine.engine.options.resolutionpolicy.IResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.debug.Debug;
-import org.mindrot.jbcrypt.BCrypt;
 
-import com.edu.message.LoginPacket;
+import com.edu.pinochlescene.AbstractScene;
+import com.edu.pinochlescene.GameScene;
+import com.edu.pinochlescene.LoadingScene;
 import com.edu.pinochlescene.LobbyScene;
+import com.edu.pinochlescene.SelectGameScene;
 import com.edu.pinochlescene.SplashScene;
-import com.edu.util.MessageHandler;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.KeyEvent;
 
 public class GameActivity extends BaseGameActivity {
 	
@@ -32,7 +29,7 @@ public class GameActivity extends BaseGameActivity {
 	public static final int CW = 720;
 	public static final int CH = 1200;
 	public static final int FPS_LIMIT = 60;
-	protected static final long SPLASH_DURATION = 2000;
+	protected static final long SPLASH_DURATION = 1000;
 	
 	@Override
 	public synchronized void onResumeGame() {
@@ -46,7 +43,8 @@ public class GameActivity extends BaseGameActivity {
 	
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		camera = new ZoomCamera(0,0,CW,CH);
+		//camera = new SmoothCamera(0, 0, CW, CH, 0, 700, 0);
+		camera = new ZoomCamera(0, 0, CW, CH);
 		camera.setZClippingPlanes(-100, 100);
 		IResolutionPolicy resolutionPolicy = new FillResolutionPolicy();
 		EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, resolutionPolicy, camera);
@@ -90,7 +88,7 @@ public class GameActivity extends BaseGameActivity {
 			
 			@Override
 			public void run() {
-				Login();
+				login();
 			}
 		}, SPLASH_DURATION);
 	}
@@ -102,14 +100,18 @@ public class GameActivity extends BaseGameActivity {
 	}
 	
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK){
-			finish();
-		}
-		return true;
-	}
+    public void onBackPressed()
+    {
+		final Scene scene = SceneManager.getInstance().getCurrentScene();
+        if(!scene.getClass().equals(LobbyScene.class)) {
+        	SceneManager.getInstance().showScene(LobbyScene.class);
+        }
+        else{
+            this.finish();
+        }
+    }
 	
-	public void Login() {
+	public void login() {
 		startActivity(new Intent(this,LoginActivity.class));
 	}
 	

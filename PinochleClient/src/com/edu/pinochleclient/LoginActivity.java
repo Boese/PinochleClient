@@ -3,9 +3,6 @@ package com.edu.pinochleclient;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.andengine.util.debug.Debug;
-import org.mindrot.jbcrypt.BCrypt;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -19,11 +16,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import com.edu.message.LoginPacket;
-
 public class LoginActivity extends Activity{
 	private EditText username;
 	private EditText password;
+	private EditText password2;
 	private EditText email;
 	private TextView message;
 	
@@ -41,56 +37,84 @@ public class LoginActivity extends Activity{
 	private Button forgotBackButton;
 	
 	private ProgressBar spinner;
-	private Boolean passworddirty = false;
 	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
+		
+		// Initialize components
 		viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
 		
 		username = (EditText)findViewById(R.id.username);
 		password = (EditText)findViewById(R.id.password);
-		email = (EditText)findViewById(R.id.emailC);
+		
 		message = (TextView)findViewById(R.id.textView2);
 		spinner = (ProgressBar)findViewById(R.id.progressBar1);
 		spinner.setVisibility(View.GONE);
 		
-		username.setText(ResourceManager.getInstance().getUsername());
-		password.setText(ResourceManager.getInstance().getHashed_password());
-		email.setText(ResourceManager.getInstance().getEmail());
+		// Load activity into LoginManager & ResourceManager
+		LoginManager.getInstance().setLoginActivity(this);
+		ResourceManager.getInstance().setLoginActivity(this);
+		LoginManager.getInstance().init();
 		
+		// Set password field to clean
+		LoginManager.getInstance().setPassword_dirty(false);
+		
+		// If user clicks on password field, set dirty to true, erase fake password, set salt to null
 		password.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if(MotionEvent.ACTION_UP == event.getAction()) {
-					Debug.i("password touched");
 					password = (EditText)findViewById(R.id.password);
 					password.setText("");
-	                passworddirty = true;
+	                LoginManager.getInstance().setPassword_dirty(true);
+	                LoginManager.getInstance().setStored_salt(null);
 	            }
 	            return false;
 			}
 	    });
 		
-		ResourceManager.getInstance().init(this);
-		
+		// Login
 		login = (Button)findViewById(R.id.loginbutton);
 		login.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LoginPacket loginPacket = new LoginPacket("login",username.getText().toString());
-				String encryptedpassword = encryptPassword(password.getText().toString());
-				if(encryptedpassword != null) {
-					loadSpinner(true);
-					loginPacket.setHash_password(encryptedpassword);
-	        		ResourceManager.getInstance().login(loginPacket);
-				} else {
-					setMessage("Password must be at least 8 characters");
-				}
+					LoginManager.getInstance().setUsername(username.getText().toString());
+					LoginManager.getInstance().setPassword(password.getText().toString());
+					LoginManager.getInstance().login();
 			}
 		});
+		
+		// Create Account
+		createViewButton = (Button)findViewById(R.id.createbutton);
+		createViewButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(password.getText().toString().equalsIgnoreCase(password2.getText().toString())) {
+					LoginManager.getInstance().setUsername(username.getText().toString());
+					LoginManager.getInstance().setPassword(password.getText().toString());
+					LoginManager.getInstance().setEmail(email.getText().toString());
+					LoginManager.getInstance().createAccount();
+				}
+				else
+					setMessage("Password's don't match");
+			}
+		});
+		
+		// Forgot Password
+		forgotViewButton = (Button)findViewById(R.id.forgotbutton);
+		forgotViewButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				LoginManager.getInstance().setUsername(username.getText().toString());
+				LoginManager.getInstance().setEmail(email.getText().toString());
+				LoginManager.getInstance().forgotPassword();
+			}
+		});
+		
+		// Switch to create account screen
 		createAccount = (Button)findViewById(R.id.createaccountbutton);
 		createAccount.setOnClickListener(new OnClickListener() {
 			@Override
@@ -107,9 +131,12 @@ public class LoginActivity extends Activity{
 				});
 				username = (EditText)findViewById(R.id.usernameC);
 				password = (EditText)findViewById(R.id.passwordC);
+				password2 = (EditText)findViewById(R.id.passwordC2);
 				email = (EditText)findViewById(R.id.emailC);
 			}
 		});
+		
+		// switch to forgot password screen
 		forgotPassword = (Button)findViewById(R.id.forgotpasswordbutton);
 		forgotPassword.setOnClickListener(new OnClickListener() {
 			@Override
@@ -128,56 +155,22 @@ public class LoginActivity extends Activity{
 				});
 				username = (EditText)findViewById(R.id.usernameF);
 				email = (EditText)findViewById(R.id.emailF);
-				username.setText(ResourceManager.getInstance().getUsername());
-				email.setText(ResourceManager.getInstance().getEmail());
+				username.setText(LoginManager.getInstance().getUsername());
+				email.setText(LoginManager.getInstance().getEmail());
 			}
 		});
-		createViewButton = (Button)findViewById(R.id.createbutton);
-		createViewButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				LoginPacket loginPacket = new LoginPacket("create_account",username.getText().toString());
-				loginPacket.setEmail(email.getText().toString());
-				if(password.getText().toString().length() < 8) {
-					setMessage("Password must be at least 8 characters");
-				} else {
-					loadSpinner(true);
-					loginPacket.setHash_password(BCrypt.hashpw(password.getText().toString(), ResourceManager.getInstance().getSalt()));
-					ResourceManager.getInstance().setCreatePacket(loginPacket);
-					ResourceManager.getInstance().login(loginPacket);
-				}
+	}
+	// load credentials
+	public void updateCredentials() {
+		if(LoginManager.getInstance().getUsername() != null) {
+			if(LoginManager.getInstance().getUsername().length() > 1) {
+				password.setText("password");
+				username.setText(LoginManager.getInstance().getUsername());
 			}
-		});
-		forgotViewButton = (Button)findViewById(R.id.forgotbutton);
-		forgotViewButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				loadSpinner(true);
-				LoginPacket loginPacket = new LoginPacket("forgot_password",username.getText().toString());
-				loginPacket.setEmail(email.getText().toString());
-				ResourceManager.getInstance().login(loginPacket);
-			}
-		});
-		
+		}
 	}
 	
-	private String encryptPassword(String password) {
-		String encryptedpassword = null;
-		if(!passworddirty && password.length() >= 8)
-			encryptedpassword = BCrypt.hashpw(password, ResourceManager.getInstance().getSalt());
-		else if(passworddirty && password.length() >= 8 && ResourceManager.getInstance().getStored_salt() != null) {
-			encryptedpassword = BCrypt.hashpw(password, ResourceManager.getInstance().getStored_salt());
-			Debug.i("Stored salt : " + ResourceManager.getInstance().getStored_salt());
-			Debug.i("encrypted password : " + encryptedpassword);
-			encryptedpassword = BCrypt.hashpw(encryptedpassword, ResourceManager.getInstance().getSalt());
-		}
-		else if(passworddirty && password.length() >= 8 && ResourceManager.getInstance().getStored_salt() == null) {
-			encryptedpassword = BCrypt.hashpw(password, ResourceManager.getInstance().getSalt());
-			encryptedpassword = BCrypt.hashpw(encryptedpassword, ResourceManager.getInstance().getSalt());
-		}
-		return encryptedpassword;	
-	}
-	
+	// update message and stop spinner
 	public void updateMessage(final String message) {
 		new Timer().schedule(new TimerTask() {
 			@Override
@@ -185,9 +178,10 @@ public class LoginActivity extends Activity{
 				loadSpinner(false);
 				setMessage(message);
 			}
-		}, 1000);
+		}, 800);
 	}
 	
+	// update message
 	public void setMessage(final String message) {
 		final TextView t = this.message;
 		this.runOnUiThread(new Runnable() {
@@ -199,6 +193,7 @@ public class LoginActivity extends Activity{
 		
 	}
 	
+	// set spinner to spin or stop
 	public void loadSpinner(final Boolean on) {
 		final ProgressBar s = this.spinner;
 		this.runOnUiThread(new Runnable() {
@@ -212,13 +207,14 @@ public class LoginActivity extends Activity{
 		});
 	}
 	
+	// handle back button
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK){
 			switch(state) {
 			case "login": 
+			    ResourceManager.getInstance().activity.finish();
 				finish();
-				ResourceManager.getInstance().activity.finish();
 				break;
 			case "create":
 				createBackButton.performClick();

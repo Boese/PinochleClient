@@ -3,8 +3,10 @@ package com.edu.pinochlescene;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.input.touch.TouchEvent;
@@ -13,11 +15,13 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+
 import com.edu.pinochleclient.GameActivity;
+import com.edu.pinochleclient.ResourceManager;
+import com.edu.pinochleclient.SceneManager;
 
 public class LobbyScene extends AbstractScene{
 
-	private TiledTextureRegion LobbyRegion;
 	private TiledTextureRegion RoomsRegion;
 	private TiledTextureRegion JoinRegion;
 	private TiledTextureRegion OptionsRegion;
@@ -29,12 +33,6 @@ public class LobbyScene extends AbstractScene{
 	@Override
 	public void loadResources() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		
-		BitmapTextureAtlas LobbyTexture = new BitmapTextureAtlas(activity.getTextureManager(), 448, 157, TextureOptions.BILINEAR);
-		LobbyRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(LobbyTexture, activity, "lobby.png", 0, 0, 1, 2);
-		LobbyTexture.load();
-		buttonRegions.add(LobbyRegion);
-		buttonNames.add("Lobby");
 		
 		BitmapTextureAtlas RoomsTexture = new BitmapTextureAtlas(activity.getTextureManager(), 448, 157, TextureOptions.BILINEAR);
 		RoomsRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(RoomsTexture, activity, "rooms.png", 0, 0, 1, 2);
@@ -54,8 +52,8 @@ public class LobbyScene extends AbstractScene{
 		buttonRegions.add(OptionsRegion);
 		buttonNames.add("Options");
 		
-		BitmapTextureAtlas backgroundTexture = new BitmapTextureAtlas(activity.getTextureManager(), 860, 1078, TextureOptions.BILINEAR);
-		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backgroundTexture, activity, "logincardscopy.png",0,0);
+		BitmapTextureAtlas backgroundTexture = new BitmapTextureAtlas(activity.getTextureManager(), 2000, 2000, TextureOptions.BILINEAR);
+		backgroundRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(backgroundTexture, activity, "background.png",0,0);
 		backgroundTexture.load();
 	}
 
@@ -71,7 +69,7 @@ public class LobbyScene extends AbstractScene{
 	}
 	
 	public void initBackground() {
-		AutoParallaxBackground background = new AutoParallaxBackground(0, 0, 0, 5);
+		AutoParallaxBackground background = new AutoParallaxBackground(0, 0, 0, 2);
 		Sprite s = new Sprite(GameActivity.CW/2, GameActivity.CH-((934/3)*2), backgroundRegion, vbom);
 		ParallaxEntity b = new ParallaxEntity(-5,s);
 		background.attachParallaxEntity(b);
@@ -89,7 +87,16 @@ public class LobbyScene extends AbstractScene{
 			            switch(pAreaTouchEvent.getAction()){
 			            case TouchEvent.ACTION_DOWN:
 			                    this.setCurrentTileIndex(1);
-			                    activity.toastOnUiThread(buttonNames.get(ii) + " clicked");
+			                    switch(buttonNames.get(ii)) {
+			                    case "Join": 
+			                    	// ResourceManager.getInstance().sendRequest() -> join game
+			                    	SceneManager.getInstance().showScene(GameScene.class);
+			                    	break;
+			                    case "Options": activity.toastOnUiThread("Options clicked");
+			                    	break;
+			                    case "Rooms": SceneManager.getInstance().showScene(SelectGameScene.class);
+			                    	break;
+			                    }
 			                    break;
 	                    case TouchEvent.ACTION_UP:
 	                            this.setCurrentTileIndex(0);
@@ -104,7 +111,7 @@ public class LobbyScene extends AbstractScene{
 			i++;
 		}
 	}
-
+	
 	@Override
 	public void unloadResources() {
 		buttonRegions = null;

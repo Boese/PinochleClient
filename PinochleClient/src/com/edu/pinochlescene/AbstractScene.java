@@ -31,9 +31,6 @@ public abstract class AbstractScene extends Scene {
 	public abstract void create();
 	public abstract void unloadResources();
 	public abstract void destroy();
-	public void onBackKeyPressed() {
-		Debug.d("Back key pressed");
-	}
 	public abstract void onPause();
 	public abstract void onResume();
 	public void onUpdate(){}
